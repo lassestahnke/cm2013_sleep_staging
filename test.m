@@ -31,9 +31,9 @@ set(gcf,'color','w');
 
 %% plot Hypnogram (sleep stages over time)
 figure(2);
-plot(((1:length(stages))*30)./60,stages); %sleep stages are for 30 seconds epochs
+plot(((1:length(stages)))./60,stages); %sleep stages already in seconds
 ylim([0 6]);
-set(gca,'ytick',[0:6],'yticklabel',{'REM','','N3','N2','N1','Wake',''});
+set(gca,'ytick',[0:6],'yticklabel',{'REM','N4','N3','N2','N1','Wake',''});
 xlabel('Time (Minutes)');
 ylabel('Sleep Stage');
 box off;
