@@ -24,8 +24,8 @@ A5 = wrcoef('a',C,L,waveletFunction,5); % Delta
 
 length(A5)
 for epochNumber=1:numberOfEpochs
-    epochStart = ((epochNumber-1)*Fs*30+1);
-    epochEnd = (epochStart-1) + 30*Fs ;
+    epochStart = ((epochNumber-1)*Fs*epochLength+1);
+    epochEnd = (epochStart-1) + epochLength*Fs ;
     
     fprintf("info")
     display(epochNumber)
