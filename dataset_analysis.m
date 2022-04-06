@@ -121,3 +121,14 @@ subplot(4,1,4)
 plot(1/Fs:1/Fs:length(cA5)/Fs, cA5)
 
 result = extract_freq_features(signal, epochLength, Fs)
+
+% prepating labels for training -> labels in epochs
+stage_per_epoch = [];
+num_epochs = floor(length(stages)/epochLength);
+for k=1:num_epochs
+    stage_k = stages((k-1)*30+1);
+    if stage_k == 1
+        stage_k = 2;
+    end
+    stage_per_epoch(end+1) = stage_k;
+end
