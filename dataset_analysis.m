@@ -32,8 +32,8 @@ i = 8 % plot EEG
 Fs = hdr.samples(i);
 (length(record(i,:)')/Fs);
 epochNumber = 1; % plot nth epoch of 30 seconds
-epochStart = (epochNumber*Fs*30);
-epochEnd = epochStart + 600*Fs;
+epochStart = (epochNumber-1)*Fs*30+1;
+epochEnd = (epochStart-1) + 600*Fs;
 %signal = record(i,epochStart:epochEnd);
 signal = record(i,epochStart:end);
 plot((1:length(signal))/Fs,signal);
@@ -120,3 +120,4 @@ plot(1/Fs:1/Fs:length(cD5)/Fs, cD5)
 subplot(4,1,4)
 plot(1/Fs:1/Fs:length(cA5)/Fs, cA5)
 
+result = extract_freq_features(signal, epochLength, Fs)
