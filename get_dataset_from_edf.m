@@ -100,7 +100,7 @@ function [x_train, y_train, x_validation, y_validation, x_test, y_test] ...
 
     % split dataset into train, validation and test
     rng(1337); % set random seed
-    num_samples = size(x_train);
+    num_samples = size(x_data);
     num_samples = num_samples(1);
 
     idx_all = randperm(num_samples);
