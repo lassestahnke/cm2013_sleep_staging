@@ -55,6 +55,7 @@ Fs = hdr.samples(8);  % samples per second
 EEG_rec = record(8,1:end-Fs*30);
 EEG_rec = filter_EEG(EEG_rec, "wavelet_filter", Fs);
 num_epochs = floor(length(EEG_rec)/epochLength/Fs);
+display(num_epochs)
 % get eeg data per epoch 
 EEG_rec_per_epoch = reshape(EEG_rec, epochLength*Fs, num_epochs).';
 

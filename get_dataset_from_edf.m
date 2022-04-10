@@ -41,16 +41,8 @@ function [x_train, y_train, x_validation, y_validation, x_test, y_test] ...
         error('Please enter rel_test between 0 and 1!')
     end
     
-    % initializing variables:
-    x_train = [];
-    y_train = [];
-    x_validation = [];
-    y_validation = [];
-    x_test = [];
-    y_test = [];
-
     % set temporaty variables
-    x_data = cell(1,1);
+    x_data = [];
     y_data = [];
 
     num_features = size(modalities);
@@ -62,8 +54,6 @@ function [x_train, y_train, x_validation, y_validation, x_test, y_test] ...
 
         edf_filename_tmp = edf_files(i);
         xml_filename_tmp = xml_files(i);
-
-        display(num_edf_files)
 
         % load files
         [hdr, record] = edfread(edf_filename_tmp);
@@ -106,11 +96,25 @@ function [x_train, y_train, x_validation, y_validation, x_test, y_test] ...
         y_data = [y_data; stage_per_epoch];
 
     end 
+    y_data = categorical(y_data);
+
+    % split dataset into train, validation and test
+    rng(1337); % set random seed
+    num_samples = size(x_train);
+    num_samples = num_samples(1);
+
+    idx_all = randperm(num_samples);
+    idx_train = idx_all(1:round(num_samples*(1-rel_test-rel_validation)));
+    idx_validation = idx_all(round(num_samples*(1-rel_test-rel_validation))+1:round(num_samples*(1-rel_test)));
+    idx_test = idx_all(round(num_samples*(1-rel_test))+1:end);
+    
+    x_train = x_data(idx_train);
+    y_train = y_data(idx_train);
+
+    x_validation = x_data(idx_validation);
+    y_validation = y_data(idx_validation);
+
+    x_test = x_data(idx_test);
+    y_test = y_data(idx_test);
+
     % todo: add support for more modalities (caution with zero padding)
-    % todo: add datasplitting 
-    % fix more epochs than labels
-    x_train = x_data;
-    y_train = categorical(y_data);
-
-
-
