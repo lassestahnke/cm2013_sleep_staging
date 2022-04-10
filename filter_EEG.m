@@ -1,4 +1,4 @@
-function filter_EEG(signal, method, Fs)
+function [wav_filt_signal] = filter_EEG(signal, method, Fs)
         x_min = 5200;
         x_max = 5800;
 switch method
@@ -26,62 +26,62 @@ switch method
     
         % plotting Wavelet decompositions
     
-        figure('Name','Reconstructed signal at different levels')
-        subplot(4,1,1)
-        title('D3 - beta')
-        plot(1/Fs:1/Fs:length(D3)/Fs, D3)
-        xlim([x_min x_max]);
-        
-        subplot(4,1,2)
-        title('D4 - alpha')
-        plot(1/Fs:1/Fs:length(D4)/Fs, D4)
-        xlim([x_min x_max]);
-        
-        subplot(4,1,3)
-        title('D5 - theta')
-        plot(1/Fs:1/Fs:length(D5)/Fs, D5)
-        xlim([x_min x_max]);
-        
-        subplot(4,1,4)
-        title('A5 - delta')
-        plot(1/Fs:1/Fs:length(A5)/Fs, A5)
-        xlim([x_min x_max]);
+%         figure('Name','Reconstructed signal at different levels')
+%         subplot(4,1,1)
+%         title('D3 - beta')
+%         plot(1/Fs:1/Fs:length(D3)/Fs, D3)
+%         xlim([x_min x_max]);
+%         
+%         subplot(4,1,2)
+%         title('D4 - alpha')
+%         plot(1/Fs:1/Fs:length(D4)/Fs, D4)
+%         xlim([x_min x_max]);
+%         
+%         subplot(4,1,3)
+%         title('D5 - theta')
+%         plot(1/Fs:1/Fs:length(D5)/Fs, D5)
+%         xlim([x_min x_max]);
+%         
+%         subplot(4,1,4)
+%         title('A5 - delta')
+%         plot(1/Fs:1/Fs:length(A5)/Fs, A5)
+%         xlim([x_min x_max]);
     
         % plotting wavelet decomposition coefficients
     
-        figure('Name', 'Wavelet decomposition coefficients')
-        subplot(4,1,1)
-        title('cD3')
-        plot(1/Fs:1/Fs:length(cD3)/Fs, cD3)
-        
-        subplot(4,1,2)
-        title('cD4')
-        plot(1/Fs:1/Fs:length(cD4)/Fs, cD4)
-        
-        subplot(4,1,3)
-        title('cD5')
-        plot(1/Fs:1/Fs:length(cD5)/Fs, cD5)
-        
-        subplot(4,1,4)
-        title('cA5')
-        plot(1/Fs:1/Fs:length(cA5)/Fs, cA5)
+%         figure('Name', 'Wavelet decomposition coefficients')
+%         subplot(4,1,1)
+%         title('cD3')
+%         plot(1/Fs:1/Fs:length(cD3)/Fs, cD3)
+%         
+%         subplot(4,1,2)
+%         title('cD4')
+%         plot(1/Fs:1/Fs:length(cD4)/Fs, cD4)
+%         
+%         subplot(4,1,3)
+%         title('cD5')
+%         plot(1/Fs:1/Fs:length(cD5)/Fs, cD5)
+%         
+%         subplot(4,1,4)
+%         title('cA5')
+%         plot(1/Fs:1/Fs:length(cA5)/Fs, cA5)
 
         %filtering
         cD1_new = zeros(1,length(cD1));
         cD2_new = zeros(1,length(cD2)); % Gamma; 32.25 - 62.5 Hz
         C_new = [cA5 cD5 cD4 cD3 cD2_new cD1_new];
 
-        figure('Name','original vs filtered signal')
-        subplot(2,1,1)
+%         figure('Name','original vs filtered signal')
+%         subplot(2,1,1)
         wav_filt_signal = waverec(C_new,L,waveletFunction);
-        plot((1:length(wav_filt_signal))/Fs,wav_filt_signal);
-        title('filtered')
-        xlim([x_min x_max]);
-
-        subplot(2,1,2)
-        plot((1:length(signal))/Fs,signal);
-        title('original')
-        xlim([x_min x_max]);
+%         plot((1:length(wav_filt_signal))/Fs,wav_filt_signal);
+%         title('filtered')
+%         xlim([x_min x_max]);
+% 
+%         subplot(2,1,2)
+%         plot((1:length(signal))/Fs,signal);
+%         title('original')
+%         xlim([x_min x_max]);
         
 
 

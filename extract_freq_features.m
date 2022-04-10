@@ -26,20 +26,12 @@ length(A5)
 for epochNumber=1:numberOfEpochs
     epochStart = ((epochNumber-1)*Fs*epochLength+1);
     epochEnd = (epochStart-1) + epochLength*Fs ;
-    
-    fprintf("info")
-    display(epochNumber)
-    display(epochStart)
-    display(epochEnd)
+
     % compute signal energy for each band
     energies(1,epochNumber) = sum(D3(epochStart:epochEnd).^2); %beta
     energies(2,epochNumber) = sum(D4(epochStart:epochEnd).^2); %alpha
     energies(3,epochNumber) = sum(D5(epochStart:epochEnd).^2); %theta
     energies(4,epochNumber) = sum(A5(epochStart:epochEnd).^2); %delta
-%     E_beta = sum(D3(epochStart:epochEnd).^2)
-%     E_alpha = sum(D4(epochStart:epochEnd).^2)
-%     E_theta = sum(D5(epochStart:epochEnd).^2)
-%     E_delta = sum(A5(epochStart:epochEnd).^2)
 end
 return
 
