@@ -4,10 +4,8 @@ close all;
 clc; 
 
 % loading training data
-edf_files = ["Data/R1.edf", "Data/R2.edf", "Data/R3.edf",...
-             "Data/R4.edf", "Data/R5.edf"];
-xml_files = ["Data/R1.xml", "Data/R2.xml", "Data/R3.xml",...
-             "Data/R4.xml", "Data/R5.xml"];
+edf_files = ["Data/R1.edf"];
+xml_files = ["Data/R1.xml"];
 % set relative number of validation and test data
 rel_validation = 0.1;
 rel_test = 0;
