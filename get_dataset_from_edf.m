@@ -28,9 +28,9 @@ function [x_train, y_train, x_validation, y_validation, x_test, y_test] ...
 %}
 
     % checking input format:
-    num_edf_files = size(edf_files);
-    num_xml_files = size(xml_files);
-    if num_edf_files(2) ~= num_xml_files(2)
+    num_edf_files = size(edf_files,2);
+    num_xml_files = size(xml_files,2);
+    if num_edf_files ~= num_xml_files
         error('Number of .edf files and .xml files does not match!')
     end
     
@@ -48,7 +48,7 @@ function [x_train, y_train, x_validation, y_validation, x_test, y_test] ...
 
     num_features = size(modalities,2);
 
-    for i=1:1:num_edf_files(2)
+    for i=1:1:num_edf_files
         x_tmp = [];
         y_tmp = [];
 
@@ -61,8 +61,7 @@ function [x_train, y_train, x_validation, y_validation, x_test, y_test] ...
             = readXML(xml_filename_tmp);
         
         % transforming labels and change label 1 to 2
-        num_epochs = size(stages);
-        num_epochs = num_epochs(2)/epochLength;
+        num_epochs = size(stages,2)/epochLength;
         stage_per_epoch = reshape(stages, epochLength, num_epochs);
         stage_per_epoch = stage_per_epoch(1,:).';
         stage_per_epoch(stage_per_epoch==1) = 2;
