@@ -2,7 +2,7 @@
 % format for DL 
 function [x_train, y_train, x_validation, y_validation, x_test, y_test] ...
     = get_dataset_from_edf(edf_files, xml_files, modalities, ...
-    rel_validation, rel_test)
+    rel_validation, rel_test, rnd_seed)
 
 %{
     Arguments: 
@@ -70,15 +70,20 @@ function [x_train, y_train, x_validation, y_validation, x_test, y_test] ...
                 EEG_rec_per_epoch = reshape(EEG_rec, epochLength*Fs, num_epochs).';
                 
                 x_tmp = cat(3, x_tmp, EEG_rec_per_epoch);
-            end    
+            end  
+
+            if ismember('EEGsec', modalities)
+                Fs = hdr.samples(3);  % samples per second
+                EEG_rec = record(3,1:end-Fs*epochLength);
+                EEG_rec = filter_EEG(EEG_rec, "wavelet_filter", Fs);
+                num_epochs = floor(length(EEG_rec)/epochLength/Fs);
+                % get eeg data per epoch 
+                EEG_rec_per_epoch = reshape(EEG_rec, epochLength*Fs, num_epochs).';
+                
+                x_tmp = cat(3, x_tmp, EEG_rec_per_epoch);
+            end  
         end
         size_x_tmp = size(x_tmp);
-
-        % properly append x_tmp to x_data as a cell array with
-        % num_features * samples double 
-        
-
-        %x_tmp = mat2cell(x_tmp, ones(size_x_tmp(1),1),num_features);
         
         for k=1:1:size_x_tmp(1)
             arr_tmp = [];
@@ -99,7 +104,7 @@ function [x_train, y_train, x_validation, y_validation, x_test, y_test] ...
     y_data = categorical(y_data);
 
     % split dataset into train, validation and test
-    rng(1337); % set random seed
+    rng(rnd_seed); % set random seed
     num_samples = size(x_data);
     num_samples = num_samples(1);
 
