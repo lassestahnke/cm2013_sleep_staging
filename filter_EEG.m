@@ -66,7 +66,7 @@ switch method
 %         title('cA5')
 %         plot(1/Fs:1/Fs:length(cA5)/Fs, cA5)
 
-        %filtering
+        %filtering out high frequencies
         cD1_new = zeros(1,length(cD1));
         cD2_new = zeros(1,length(cD2)); % Gamma; 32.25 - 62.5 Hz
         C_new = [cA5 cD5 cD4 cD3 cD2_new cD1_new];
