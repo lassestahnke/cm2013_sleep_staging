@@ -41,8 +41,8 @@ stage_per_epoch = reshape(stages, epochLength, numberOfEpochs);
 stage_per_epoch = stage_per_epoch(1,:).';
 
 %calculate features
-[mobility, complexity] = extract_hjort_parameters(signal, epochLength, Fs);
-[mean_signal, variance, amplitude, skewness_signal, kurtosis_signal] = extract_temp_features(signal, epochLength, Fs);
 [energies] = extract_freq_features(signal, epochLength, Fs);
-%%
-features = [mobility; complexity; skewness_signal; kurtosis_signal; energies]';
+% % old hjort and temporal feature functions, uncomment to test
+% %[mobility, complexity] = extract_hjort_parameters(signal, epochLength, Fs);
+% %[mean_signal, variance, amplitude, skewness_signal, kurtosis_signal] = extract_temp_features(signal, epochLength, Fs);
+% %features = [mobility; complexity; skewness_signal; kurtosis_signal; energies]';
