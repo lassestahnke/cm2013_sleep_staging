@@ -52,8 +52,8 @@
 % % IN EPOCHS
 % % comment above and uncomment this part to use the old function
 
-function [mobility, complexity] = extract_hjort_parameters(signal, epochLength, Fs)
-
+function [hjort_parameters] = extract_hjort_parameters(signal, epochLength, Fs)
+% Function calculating Hjort parameters of a signal
 numberOfEpochs = floor(length(signal)/epochLength/Fs);
 
 activity = zeros(1, numberOfEpochs);
@@ -68,5 +68,8 @@ for epochNumber=1:numberOfEpochs
     mobility(epochNumber) = sqrt(var(gradient(signal(epochStart:epochEnd)))/activity);
     complexity(epochNumber) = (sqrt(var(gradient(gradient(signal(epochStart:epochEnd)))))/var(signal(epochStart:epochEnd)))/mobility(epochNumber);
 end
+
+hjort_parameters=[mobility; complexity];
 end
+
 

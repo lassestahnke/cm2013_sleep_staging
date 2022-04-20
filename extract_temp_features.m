@@ -62,7 +62,7 @@
 % % IN EPOCHS
 % % comment above and uncomment this part to use the old function
 
-function [mean_signal, variance, amplitude, skewness_signal, kurtosis_signal] = extract_temp_features(signal, epochLength, Fs)
+function [temp_features] = extract_temp_features(signal, epochLength, Fs)
 
 numberOfEpochs = floor(length(signal)/epochLength/Fs);
 mean_signal= zeros(1, numberOfEpochs);
@@ -81,6 +81,6 @@ for epochNumber=1:numberOfEpochs
     skewness_signal(epochNumber)=skewness(signal(epochStart:epochEnd));
     kurtosis_signal(epochNumber)=kurtosis(signal(epochStart:epochEnd));
 end
-return
 
+temp_features=[mean_signal; variance; amplitude; skewness_signal; kurtosis_signal];
 end
