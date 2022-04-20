@@ -13,6 +13,7 @@ xmlFilename = 'Data/R4.xml';
 
 %loading data 
 [hdr, record] = edfread(edfFilename,'targetSignals','EEG');
+[hdr2, record2] = edfread(edfFilename,'targetSignals','EOGL');
 [events, stages, epochLength,annotation] = readXML(xmlFilename);
 numberOfEpochs = length(stages)/(epochLength);
 Fs = hdr.samples;
@@ -20,7 +21,7 @@ Fs = hdr.samples;
 %wavelet filtering of EEG
 record = filter_EEG(record,'wavelet_filter',Fs);
 
-%dividing signal into epochs array(epochNumber,epochRecords)
+% %dividing signal into epochs array(epochNumber,epochRecords)
 signal_per_epoch = [];
 for epochNumber = 1:numberOfEpochs
     epochStart = (epochNumber-1)*Fs*epochLength+1;
@@ -43,6 +44,6 @@ stage_per_epoch = stage_per_epoch(1,:).';
 %calculate features
 [energies] = extract_freq_features(signal, epochLength, Fs);
 % % old hjort and temporal feature functions, uncomment to test
-% %[mobility, complexity] = extract_hjort_parameters(signal, epochLength, Fs);
-% %[mean_signal, variance, amplitude, skewness_signal, kurtosis_signal] = extract_temp_features(signal, epochLength, Fs);
-% %features = [mobility; complexity; skewness_signal; kurtosis_signal; energies]';
+[mobility, complexity] = extract_hjort_parameters(signal, epochLength, Fs);
+[mean_signal, variance, amplitude, skewness_signal, kurtosis_signal] = extract_temp_features(signal, epochLength, Fs);
+features = [mobility; complexity; skewness_signal; kurtosis_signal; energies]';
