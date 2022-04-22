@@ -3,7 +3,7 @@ function [energies] = extract_freq_features(signal, epochLength, Fs)
 numberOfEpochs = floor(length(signal)/epochLength/Fs);
 % inintializing features:
 energies = zeros(4,numberOfEpochs);
-
+energies_norm = zeros(4,numberOfEpochs);
 % perform wavelet decomposition
 waveletFunction = 'db8';
 %sig_crop = signal(125*140:125*170);
@@ -32,6 +32,18 @@ for epochNumber=1:numberOfEpochs
     energies(2,epochNumber) = sum(D4(epochStart:epochEnd).^2); %alpha
     energies(3,epochNumber) = sum(D5(epochStart:epochEnd).^2); %theta
     energies(4,epochNumber) = sum(A5(epochStart:epochEnd).^2); %delta
+    
+    %compute total sum of energies in an epoch
+    energies_total=sum(energies(:,epochNumber));
+    
+    %compute energy ratio per band E_i / E_total
+    energies_norm(1,epochNumber) = energies(1,epochNumber)./energies_total; %beta
+    energies_norm(2,epochNumber) = energies(2,epochNumber)./energies_total; %alpha
+    energies_norm(3,epochNumber) = energies(3,epochNumber)./energies_total; %theta
+    energies_norm(4,epochNumber) = energies(4,epochNumber)./energies_total; %delta
+
+
+
 end
 return
 
