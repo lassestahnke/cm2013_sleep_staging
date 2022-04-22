@@ -4,7 +4,7 @@
 % function to get train, test and Validation data from EDF file in correct
 % format for DL 
 function [x_train, y_train, x_validation, y_validation, x_test, y_test] ...
-    = extract_dataset_from_edf(edf_files, xml_files, modalities, ...
+    = extract_features_from_edf(edf_files, xml_files, modalities, ...
     rel_validation, rel_test, rnd_seed)
 
 %{
@@ -72,7 +72,7 @@ function [x_train, y_train, x_validation, y_validation, x_test, y_test] ...
         y_data = [y_data; stage_per_epoch];
         
         % transforming actual data
-        for j=1:1:num_features
+%        for j=1:1:num_features
             % Get EEG data
             if ismember('EEG', modalities)
                 Fs = hdr.samples(8);  % samples per second
@@ -95,6 +95,7 @@ function [x_train, y_train, x_validation, y_validation, x_test, y_test] ...
                 
                 %x_tmp = cat(3, x_tmp, EEG_rec_per_epoch);
                 EEG_data = [temporal_features', freq_features', hjort_features'];
+                x_tmp = cat(2,x_tmp, EEG_data);
                 disp(EEG_data)
                 disp(size(EEG_data));
             end  
@@ -102,8 +103,31 @@ function [x_train, y_train, x_validation, y_validation, x_test, y_test] ...
             % Get EEGsec data
             if ismember('EEGsec', modalities)
                 Fs = hdr.samples(3);  % samples per second
-                EEG_rec = record(3,1:end-Fs*epochLength);
-                EEG_rec = filter_EEG(EEG_rec, "wavelet_filter", Fs);
+                EEGsec_rec = record(3,1:end-Fs*epochLength);
+                EEGsec_rec = filter_EEG(EEGsec_rec, "wavelet_filter", Fs);
+
+                temporal_features = extract_temp_features(EEGsec_rec, epochLength, Fs);
+                freq_features = extract_freq_features(EEGsec_rec, epochLength, Fs);
+                hjort_features = extract_hjort_parameters(EEGsec_rec, epochLength, Fs);
+                %fprintf('Dimensions temporal features: \n')
+                %disp(size(temporal_features));
+
+                %fprintf('Dimensions freq features: \n')
+                %disp(size(freq_features));
+
+                %fprintf('Dimensions hjort features: \n')
+                %disp(size(hjort_features));
+                % get eeg data per epoch 
+                %EEG_rec_per_epoch = reshape(EEG_rec, epochLength*Fs, ...
+                %                            num_epochs).';
+                
+                %x_tmp = cat(3, x_tmp, EEG_rec_per_epoch);
+                EEGsec_data = [temporal_features', freq_features', hjort_features'];
+                x_tmp = cat(2,x_tmp, EEGsec_data);
+                %disp(EEG_data)
+                %disp(size(EEG_data));
+
+
                 % get eeg data per epoch 
                 % all features
             end  
@@ -111,8 +135,13 @@ function [x_train, y_train, x_validation, y_validation, x_test, y_test] ...
             %Get EOGL data
             if ismember('EOGL', modalities)
                 Fs = hdr.samples(6);  % samples per second
-                EOG_rec = record(6,1:num_epochs*Fs*epochLength); 
+                EOGL_rec = record(6,1:num_epochs*Fs*epochLength); 
                 % TODO: Add pre-processing
+                temporal_features = extract_temp_features(EOGL_rec, epochLength, Fs);
+                
+                EOGL_data = [temporal_features'];
+                x_tmp = cat(2,x_tmp, EOGL_data);
+
                 % get eog data per epoch 
                 % Temporal features
             end
@@ -143,7 +172,7 @@ function [x_train, y_train, x_validation, y_validation, x_test, y_test] ...
                 % get eog data per epoch 
                 % Temporal features
             end
-        end
+%        end
  
  
 %         for k=1:1:size(x_tmp,1)
@@ -154,10 +183,9 @@ function [x_train, y_train, x_validation, y_validation, x_test, y_test] ...
 %             cell_tmp = mat2cell(arr_tmp, num_features, size(x_tmp,2));
 %             x_data = [x_data; cell_tmp];
 %         end 
-
+    x_data = [x_data;x_tmp];
     end 
     y_data = categorical(y_data);
-    x_data = EEG_data;
     disp(size(x_data));
     % split dataset into train, validation and test
     rng(rnd_seed); % set random seed
