@@ -1,8 +1,8 @@
 %edf_files = 'Data/R4.edf';
 %xml_files = 'Data/R4.xml';
 
-edfFilename = 'Data/R4.edf';
-xmlFilename = 'Data/R4.xml';
+edfFilename = 'Data/R1.edf';
+xmlFilename = 'Data/R1.xml';
 
 % % checking input format:
 % num_edf_files = size(edf_files,2);
@@ -13,7 +13,6 @@ xmlFilename = 'Data/R4.xml';
 
 %loading data 
 [hdr, record] = edfread(edfFilename,'targetSignals','EEG');
-[hdr2, record2] = edfread(edfFilename,'targetSignals','EOGL');
 [events, stages, epochLength,annotation] = readXML(xmlFilename);
 numberOfEpochs = length(stages)/(epochLength);
 Fs = hdr.samples;
@@ -21,7 +20,7 @@ Fs = hdr.samples;
 %wavelet filtering of EEG
 record = filter_EEG(record,'wavelet_filter',Fs);
 
-% %dividing signal into epochs array(epochNumber,epochRecords)
+%dividing signal into epochs array(epochNumber,epochRecords)
 signal_per_epoch = [];
 for epochNumber = 1:numberOfEpochs
     epochStart = (epochNumber-1)*Fs*epochLength+1;
@@ -29,6 +28,7 @@ for epochNumber = 1:numberOfEpochs
     signal_per_epoch(epochNumber,:) = record(1,epochStart:epochEnd);
 end
 
+% % signal as one vector
 signal = reshape(signal_per_epoch',1,[]);
 
     %fixing signal so it matches numberOfEpochs*epochLength*Fs
