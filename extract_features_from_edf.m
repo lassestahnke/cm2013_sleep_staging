@@ -3,9 +3,8 @@
 
 % function to get train, test and Validation data from EDF file in correct
 % format for DL 
-function [x_train, y_train, x_validation, y_validation, x_test, y_test] ...
-    = extract_features_from_edf(edf_files, xml_files, modalities, ...
-    rel_validation, rel_test, rnd_seed)
+function [x_data, y_data] ...
+    = extract_features_from_edf(edf_files, xml_files, modalities)
 
 %{
     Arguments: 
@@ -37,13 +36,6 @@ function [x_train, y_train, x_validation, y_validation, x_test, y_test] ...
         error('Number of .edf files and .xml files does not match!')
     end
     
-    if rel_validation > 1 || rel_validation < 0
-        error('Please enter rel_validation between 0 and 1!')
-    end
-
-    if rel_test > 1 || rel_test < 0
-        error('Please enter rel_test between 0 and 1!')
-    end
     
     % set temporaty variables
     x_data = [];
@@ -158,7 +150,6 @@ function [x_train, y_train, x_validation, y_validation, x_test, y_test] ...
     x_data = [x_data;x_tmp];
     end 
     y_data = categorical(y_data);
-[x_train, y_train, x_validation, y_validation, x_test, y_test] = ...
-    split_train_test_validation(x_data, y_data, rel_validation, rel_test, rnd_seed);
+
 end
     
