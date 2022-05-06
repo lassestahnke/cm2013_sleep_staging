@@ -121,8 +121,14 @@ function [x_data, y_data] ...
             %Get EOGR data
             if ismember('EOGR', modalities)
                 Fs = hdr.samples(7);  % samples per second
-                EOG_rec = record(7,1:num_epochs*Fs*epochLength); 
+                EOGR_rec = record(7,1:num_epochs*Fs*epochLength); 
                 % TODO: Add pre-processing
+                temporal_features = extract_temp_features(EOGR_rec, epochLength, Fs);
+
+                EOGR_data = [temporal_features'];
+                x_tmp = cat(2,x_tmp, EOGR_data);
+
+
                 % get eog data per epoch 
                 % Temporal features
             end
