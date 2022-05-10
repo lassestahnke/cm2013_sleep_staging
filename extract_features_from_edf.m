@@ -138,17 +138,39 @@ function [x_data, y_data] ...
                 Fs = hdr.samples(4);  % samples per second
                 ECG_rec = record(4,1:num_epochs*Fs*epochLength); 
                 % TODO: Add pre-processing
-                % get eog data per epoch 
-                % Temporal features,
+                temporal_features = extract_temp_features(EEG_rec, epochLength, Fs);
+                EEG_data = [temporal_features'];
+                x_tmp = cat(2,x_tmp, EEG_data);
             end 
             
             %Get EMG data
             if ismember('EMG', modalities)
                 Fs = hdr.samples(5);  % samples per second
                 EMG_rec = record(5,1:num_epochs*Fs*epochLength); 
+                % TODO: Add pre-processing
+                temporal_features = extract_temp_features(EMG_rec, epochLength, Fs);
+                EMG_data = [temporal_features'];
+                x_tmp = cat(2,x_tmp, EMG_data);
+            end
 
-                % get eog data per epoch 
-                % Temporal features
+            %Get Sa02 data
+            if ismember('Sa02', modalities)
+                Fs = hdr.samples(1);  % samples per second
+                Sa02_rec = record(1,1:num_epochs*Fs*epochLength); 
+                % TODO: Add pre-processing
+                temporal_features = extract_temp_features(Sa02_rec, epochLength, Fs);
+                Sa02_data = [temporal_features'];
+                x_tmp = cat(2,x_tmp, Sa02_data);
+            end
+
+            %Get HR data
+            if ismember('HR', modalities)
+                Fs = hdr.samples(2);  % samples per second
+                HR_rec = record(2,1:num_epochs*Fs*epochLength); 
+                % TODO: Add pre-processing
+                temporal_features = extract_temp_features(HR_rec, epochLength, Fs);
+                HR_data = [temporal_features'];
+                x_tmp = cat(2,x_tmp, HR_data);
             end
 %        end
  
