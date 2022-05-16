@@ -1,6 +1,7 @@
 function [x_train, y_train, x_validation, y_validation, x_test, y_test] ...
     = split_train_test_validation(x_data, y_data, rel_validation, rel_test, rnd_seed)
-% split dataset into train, validation and test
+% Split dataset into train, validation and test and randomize order of
+% samples in the different sets.
 if rel_validation > 1 || rel_validation < 0
     error('Please enter rel_validation between 0 and 1!')
 end
