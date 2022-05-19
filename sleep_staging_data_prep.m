@@ -29,3 +29,17 @@ y_train = y_train(rand_perm_train,:);
 
 x_test = x_test (rand_perm_test ,:);
 y_test  = y_test (rand_perm_test ,:);
+
+%% Train model
+% FCNN
+[model, accuracy] = trainFCNN(x_train, y_train);
+% SVM
+%[model, accuracy] = trainSVM(x_train, y_train);
+disp("Accuracy of the model on train/validation data is " + accuracy*100 + "%")
+
+%% Prediction
+fit = model.predictFcn(x_test);
+% Plot model confusion matrix
+fig = figure;
+cm = confusionchart(y_test, fit, 'Normalization', 'total-normalized', 'RowSummary', 'row-normalized', 'ColumnSummary', 'column-normalized');
+cm.Normalization = 'absolute';

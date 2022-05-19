@@ -1,11 +1,7 @@
-% Attempt at having a similar version of Lasse's file for the feature
-% extraction
-
-% function to get train, test and Validation data from EDF file in correct
-% format for DL 
 function [x_data, y_data] ...
     = extract_features_from_edf(edf_files, xml_files, modalities)
-
+% Function extracting features from EDF & XML for a set of given
+% modalities.
 %{
     Arguments: 
             efd_files: [array] paths to .edf files
@@ -13,20 +9,10 @@ function [x_data, y_data] ...
             modalities:[array] modalities that should be included in
                         dataset ('EEG', "EEGsec","EOGL", "EOGR", 'ECG', 
                                  'EMG')
-            rel_validation: [float] percentage of validation data 0...1
-            rel_test:       [float] percentage of test data 0...1
-            seed:           [int] random seed for data splitting
-    
     Output:
-            x_train: [cell array] n*c*d training data 
-                        (n different cases with c features and d samples)
-            y_train: [cell array] n*1 training labels (categorical)
-            x_validation: [cell array] n*c*d validation data 
-                        (n different cases with c features and d samples)
-            y_validation [cell array] n*1 training labels (categorical)
-            x_test: [cell array] n*c*d test data 
-                        (n different cases with c features and d samples)
-            y_test: [cell array] n*1 test labels (categorical)
+            x_data: [cell array] n*m features per epoch
+                        (n different epochs for which m features are extracted)
+            y_data: [cell array] n*1 labels (categorical)
 %}
 
     % checking input format:
@@ -41,11 +27,8 @@ function [x_data, y_data] ...
     x_data = [];
     y_data = [];
 
-    num_features = size(modalities,2);
-
     for i=1:1:num_edf_files
         x_tmp = [];
-        y_tmp = [];
 
         edf_filename_tmp = edf_files(i);
         xml_filename_tmp = xml_files(i);
@@ -138,9 +121,9 @@ function [x_data, y_data] ...
                 Fs = hdr.samples(4);  % samples per second
                 ECG_rec = record(4,1:num_epochs*Fs*epochLength); 
                 % TODO: Add pre-processing
-                temporal_features = extract_temp_features(EEG_rec, epochLength, Fs);
-                EEG_data = [temporal_features'];
-                x_tmp = cat(2,x_tmp, EEG_data);
+                temporal_features = extract_temp_features(ECG_rec, epochLength, Fs);
+                ECG_data = [temporal_features'];
+                x_tmp = cat(2,x_tmp, ECG_data);
             end 
             
             %Get EMG data
@@ -172,8 +155,6 @@ function [x_data, y_data] ...
                 HR_data = [temporal_features'];
                 x_tmp = cat(2,x_tmp, HR_data);
             end
-%        end
- 
  
     x_data = [x_data;x_tmp];
     end 
