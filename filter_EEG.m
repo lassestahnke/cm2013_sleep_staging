@@ -71,20 +71,6 @@ switch method
         cD2_new = zeros(1,length(cD2)); % Gamma; 32.25 - 62.5 Hz
         C_new = [cA5 cD5 cD4 cD3 cD2_new cD1_new];
 
-%         figure('Name','original vs filtered signal')
-%         subplot(2,1,1)
-        wav_filt_signal = waverec(C_new,L,waveletFunction);
-%         plot((1:length(wav_filt_signal))/Fs,wav_filt_signal);
-%         title('filtered')
-%         xlim([x_min x_max]);
-% 
-%         subplot(2,1,2)
-%         plot((1:length(signal))/Fs,signal);
-%         title('original')
-%         xlim([x_min x_max]);
-        
-
-
     case 'butter_filter'
 
         % filter frequency over 30 hz
@@ -113,10 +99,6 @@ switch method
         figure("Name",'Periodogram of the filtered signal')
         [pxx_filt,w_filt] = periodogram(butter_filt_signal,hamming(length(butter_filt_signal)),length(butter_filt_signal),Fs);
         plot(w_filt,10*log10(pxx_filt))
-
-%         figure("Name",'Periodogram of original - filtered')
-%         [pxx_filt,w_filt] = periodogram(filt_original_diff,hamming(length(filt_original_diff)),length(filt_original_diff),Fs);
-%         plot(w_filt,10*log10(pxx_filt))
     
     otherwise
         fprintf('wrong input arguments \n')
